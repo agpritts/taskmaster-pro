@@ -145,6 +145,7 @@ $("#task-form-modal .btn-primary").click(function() {
 
     // close modal
     $("#task-form-modal").modal("hide");
+    console.log(tasks.toDo)
 
     // save in tasks array
     tasks.toDo.push({
