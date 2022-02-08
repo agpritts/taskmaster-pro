@@ -53,8 +53,7 @@ $(".list-group").on("click", "p", function() {
 $(".list-group").on("blur", "textarea", function() {
   // get textarea's current value/text
   var text = $(this)
-    .val()
-    .trim();
+    .val();
   // get parent ul's id attribute
   var status = $(this)
     .closest("list-group")
@@ -136,7 +135,6 @@ $("#task-form-modal .btn-save").click(function() {
 
     // close modal
     $("#task-form-modal").modal("hide");
-    console.log(tasks.toDo)
 
     // save in tasks array
     tasks.toDo.push({
@@ -162,38 +160,32 @@ $(".card .list-group").sortable({
   scroll: false,
   tolerance: "pointer",
   helper: "clone",
-  activate: function(event) {
-    $(this).addClass(".dropover");
-    $(".bottom-trash").addClass(".bottom-trash-drag");
-    console.log("activate", this);
+  activate: function(event, ui) {
+    $(this).addClass("dropover");
+    $(".bottom-trash").addClass("bottom-trash-drag");
   },
-  deactivate: function(event) {
-    $(this).removeClass(".dropover");
-    $(".bottom-trash").removeClass(".bottom-trash-drag");
-    console.log("deactivate", this);
+  deactivate: function(event, ui) {
+    $(this).removeClass("dropover");
+    $(".bottom-trash").removeClass("bottom-trash-drag");
   },
   over: function(event) {
-    $(event.target).addClass(".dropover-active");
-    console.log("over", event.target);
+    $(event.target).addClass("dropover-active");
   },
   out: function(event) {
-    $(event.target).removeClass(".dropover-active");
-    console.log("out", event.target);
+    $(event.target).removeClass("dropover-active");
   },
-  update: function(event) {
+  update: function() {
     var tempArr = [];
     $(this).children().each(function() {
-      var text = $(this)
+      tempArr.push({
+      text: $(this)
         .find("p")
         .text()
-        .trim();
-      var date = $(this)
+        .trim(),
+      date: $(this)
         .find("span")
         .text()
-        .trim();
-      tempArr.push({
-        text: text,
-        date: date
+        .trim()
       });
     });
     var arrName = $(this)
@@ -208,16 +200,14 @@ $("#trash").droppable({
   accept: ".card .list-group-item",
   tolerance: "touch",
   drop: function(event, ui) {
-    $(".bottom-trash").removeClass(".bottom-trash-active");
     ui.draggable.remove();
-    console.log("drop");
+    $(".bottom-trash").removeClass("bottom-trash-active");
   },
   over: function(event, ui) {
-    $(".bottom-trash").addClass(".bottom-trash-active");
-    console.log("over");
+    $(".bottom-trash").addClass("bottom-trash-active");
   },
   out: function(event, ui) {
-    $(".bottom-trash").removeClass(".bottom-trash-active");
+    $(".bottom-trash").removeClass("bottom-trash-active");
     console.log("out");
   }
 });
@@ -242,12 +232,12 @@ var auditTask = function(taskEl) {
   }
 };
 
-setInterval(function () {
-  $(".card .list-group-item").each(function(index, el) {
-    auditTask(el);
-  });
-}, 1800000);
 // load tasks for the first time
 loadTasks();
 
+setInterval(function () {
+  $(".card .list-group-item").each(function() {
+    auditTask($(this));
+  });
+}, 1800000);
 
